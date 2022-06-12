@@ -6,6 +6,7 @@
    <script type="text/javascript">
       alert(document.cookie);
    </script>
+   password=test123
 </svg>
 
 
