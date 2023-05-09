@@ -1,29 +1,6 @@
-<?xml version="1.0"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
-    <xsl:output method="html" indent="yes"/>
-    <xsl:template match="/loyaltyRewards">
-    <p>Hi, %%=properCase('<xsl:value-of select="firstName"/>')=%%!</p>
-    <p>Here's your reward statement:</p>
-    <table cellspacing="0" cellpadding="5" border="1">
-        <tr>
-            <th>Reward Date</th>
-            <th>Name</th>
-            <th>Description</th>
-            <th>Amount</th>
-        </tr>
-        <xsl:for-each select="rewards/reward">
-            <xsl:sort select="./rewardDate" order="descending" data-type="text"/>
-            <tr>
-                <td><xsl:value-of select="rewardDate"/></td>
-                <td><xsl:value-of select="name"/></td>
-                <td><xsl:value-of select="description"/></td>
-                <td align="right"><xsl:value-of select="amount"/></td>
-            </tr>
-        </xsl:for-each>
-        <tr>
-            <td colspan="3" align="right"><b>Total</b></td>
-            <td align="right"><b><xsl:value-of select="format-number(sum(rewards/reward/amount), '0.00')"/></b></td>
-        </tr>
-    </table>
-  </xsl:template>
-</xsl:stylesheet>
+<!ENTITY writer SYSTEM "https://www.w3schools.com/entities.dtd">
+<!ENTITY copyright SYSTEM "https://www.w3schools.com/entities.dtd">
+
+XML example:
+
+<author>&writer;&copyright;</author>
