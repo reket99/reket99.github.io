@@ -1,1 +1,5 @@
+
+aws iam list-policies --scope Local --query 'Policies[].[Arn]' --output text | while read -r policy_arn; do aws iam get-policy --policy-arn "$policy_arn" --query 'Policy.DefaultVersionId' --output text | while read -r version_id; do aws iam get-policy-version --policy-arn "$policy_arn" --version-id "$version_id" --query 'PolicyVersion.Document' --output json | jq -e '.Statement[] | select(.Action == "sts:AssumeRole" and .Principal.AWS == "*")' && echo "Policy ARN matching criteria: $policy_arn"; done; done
+
+
 for bucket in $(aws s3api list-buckets --query 'Buckets[].Name' --output text); do acl=$(aws s3api get-bucket-acl --bucket "$bucket" --output json); readPermissions=$(echo $acl | jq -e '.Grants[] | select(.Grantee.URI=="http://acs.amazonaws.com/groups/global/AuthenticatedUsers" and (.Permission=="READ" or .Permission=="FULL_CONTROL"))' 2>/dev/null); if [ $? -eq 0 ]; then echo "Bucket with AuthenticatedUsers READ permission found: $bucket"; fi; done
