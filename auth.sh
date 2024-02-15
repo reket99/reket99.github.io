@@ -2,7 +2,8 @@
 aws iam list-policies --scope Local --query 'Policies[].[Arn]' --output text | while read -r policy_arn; do aws iam get-policy --policy-arn "$policy_arn" --query 'Policy.DefaultVersionId' --output text | while read -r version_id; do aws iam get-policy-version --policy-arn "$policy_arn" --version-id "$version_id" --query 'PolicyVersion.Document' --output json | jq -e '.Statement[] | select(.Action == "sts:AssumeRole" and .Principal.AWS == "*")' && echo "Policy ARN matching criteria: $policy_arn"; done; done
 #!/bin/bash; OUTPUT_DIR="./lambda_env_vars"; mkdir -p "${OUTPUT_DIR}"; FUNCTION_NAMES=$(aws lambda list-functions --query 'Functions[].FunctionName' --output text); for FUNCTION_NAME in $FUNCTION_NAMES; do echo "Fetching environment variables for ${FUNCTION_NAME}..."; aws lambda get-function-configuration --function-name "${FUNCTION_NAME}" --query 'Environment.Variables' --output json > "${OUTPUT_DIR}/${FUNCTION_NAME}_env_vars.json"; if [ $? -eq 0 ]; then echo "Saved environment variables for ${FUNCTION_NAME}"; else echo "Failed to fetch environment variables for ${FUNCTION_NAME}"; fi; done; echo "All done."
 
-
+#!/bin/bash
+users=$(aws iam list-users --query 'Users[*].UserName' --output text); for user in $users; do echo "User: $user"; echo "Directly Attached Policies:"; aws iam list-attached-user-policies --user-name "$user" --query 'AttachedPolicies[*].PolicyName' --output table; echo "Group Policies:"; groups=$(aws iam list-groups-for-user --user-name "$user" --query 'Groups[*].GroupName' --output text); for group in $groups; do echo " Group: $group"; aws iam list-attached-group-policies --group-name "$group" --query 'AttachedPolicies[*].PolicyName' --output table; done; echo "--------------------------------"; done
 
 #!/bin/bash
 
